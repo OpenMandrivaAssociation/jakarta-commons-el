@@ -1,38 +1,35 @@
-%define gcj_support	1
+%define gcj_support     1
 %define base_name       el
 %define short_name      commons-%{base_name}
 %define section         free
 
 Name:           jakarta-%{short_name}
 Version:        1.0
-Release:        %mkrel 6.3
+Release:        %mkrel 7.0.1
 Epoch:          0
 Summary:        The Jakarta Commons Extension Language
 License:        Apache License
 Group:          Development/Java
-#Vendor:         JPackage Project
-#Distribution:   JPackage
 URL:            http://jakarta.apache.org/commons/el/
 Source0:        http://archive.apache.org/dist/jakarta/commons/el/source/commons-el-%{version}-src.tar.bz2
-Patch0:		%{short_name}-%{version}-license.patch
+Patch0:         %{short_name}-%{version}-license.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-buildroot
-BuildRequires:  ant, junit
+BuildRequires:  ant
+BuildRequires:  junit
 BuildRequires:  jpackage-utils >= 0:1.5.30
 BuildRequires:  jsp
 BuildRequires:  servletapi5
 %if %{gcj_support}
-BuildRequires:	java-gcj-compat-devel
-Requires(post):	java-gcj-compat
+BuildRequires:        java-gcj-compat-devel
+Requires(post):        java-gcj-compat
 Requires(postun): java-gcj-compat
 %else
-BuildArch:	noarch
+BuildArch:        noarch
 %endif
-
 
 %description
 An implementation of standard interfaces and abstract classes for
 javax.servlet.jsp.el which is part of the JSP 2.0 specification.
-
 
 %package        javadoc
 Summary:        Javadoc for %{name}
@@ -42,10 +39,11 @@ BuildRequires:  java-javadoc
 %description    javadoc
 Javadoc for %{name}.
 
-
 %prep
 %setup -q -n %{short_name}-%{version}-src
 %patch0 -p1 -b .license
+%{__perl} -pi -e 's/enum( |\.)/en\1/g' src/java/org/apache/commons/el/ImplicitObjects.java \
+                               src/java/org/apache/commons/el/parser/ELParser.java
 
 # remove all precompiled stuff
 find . -type f -name "*.jar" -exec rm -f {} \;
@@ -60,7 +58,9 @@ jspapi.build.notrequired=true
 EOBP
 
 %build
-%ant \
+export CLASSPATH=
+export OPT_JAR_LIST=:
+%{ant} \
   -Dfinal.name=%{short_name} \
   -Dj2se.javadoc=%{_javadocdir}/java \
   jar javadoc
@@ -81,13 +81,11 @@ cp -pr dist/docs/api/* $RPM_BUILD_ROOT%{_javadocdir}/%{name}-%{version}
 ln -s %{name}-%{version} $RPM_BUILD_ROOT%{_javadocdir}/%{name} # ghost symlink
 
 %if %{gcj_support}
-aot-compile-rpm
+%{_bindir}/aot-compile-rpm
 %endif
-
 
 %clean
 rm -rf $RPM_BUILD_ROOT
-
 
 %if %{gcj_support}
 %post
@@ -108,7 +106,8 @@ ln -s %{name}-%{version} %{_javadocdir}/%{name}
 %doc LICENSE.txt STATUS.html
 %{_javadir}/*
 %if %{gcj_support}
-%attr(-,root,root) %{_libdir}/gcj/%{name}
+%dir %{_libdir}/gcj/%{name}
+%attr(-,root,root) %{_libdir}/gcj/%{name}/*
 %endif
 
 %files javadoc

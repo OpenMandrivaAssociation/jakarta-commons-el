@@ -39,7 +39,7 @@
 
 Name:           jakarta-commons-el
 Version:        1.0
-Release:        %mkrel 8.1.1
+Release:        %mkrel 8.1.2
 Epoch:          0
 Summary:        The Jakarta Commons Extension Language
 License:        Apache License
@@ -61,8 +61,6 @@ BuildRequires:  junit
 
 %if %{gcj_support}
 BuildRequires:          java-gcj-compat-devel
-Requires(post):         java-gcj-compat
-Requires(postun):       java-gcj-compat
 %endif
 
 %description
@@ -78,8 +76,6 @@ Requires(post): /bin/rm /bin/ln
 Requires(postun): /bin/rm
 %if %{gcj_support}
 BuildRequires:          java-gcj-compat-devel
-Requires(post):         java-gcj-compat
-Requires(postun):       java-gcj-compat
 %endif
 
 %description    javadoc

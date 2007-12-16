@@ -39,7 +39,7 @@
 
 Name:           jakarta-commons-el
 Version:        1.0
-Release:        %mkrel 8.1.2
+Release:        %mkrel 8.1.3
 Epoch:          0
 Summary:        The Jakarta Commons Extension Language
 License:        Apache License
@@ -53,7 +53,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 %if ! %{gcj_support}
 BuildArch:      noarch
 %endif
-BuildRequires:  jpackage-utils >= 0:1.6
+BuildRequires:  java-rpmbuild >= 0:1.6
 BuildRequires:  ant
 BuildRequires:  jsp
 BuildRequires:  servletapi5

@@ -49,7 +49,6 @@ Source0:        http://archive.apache.org/dist/jakarta/commons/el/source/commons
 Patch0:         %{short_name}-%{version}-license.patch
 Patch1:         %{short_name}-eclipse-manifest.patch
 Patch2:         jakarta-commons-el-enum.patch
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 %if ! %{gcj_support}
 BuildArch:      noarch
 %endif

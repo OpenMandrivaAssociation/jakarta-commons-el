@@ -44,6 +44,7 @@ Epoch:          0
 Summary:        The Jakarta Commons Extension Language
 License:        Apache License
 Group:          Development/Java
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 URL:            http://jakarta.apache.org/commons/el/
 Source0:        http://archive.apache.org/dist/jakarta/commons/el/source/commons-el-%{version}-src.tar.gz
 Patch0:         %{short_name}-%{version}-license.patch

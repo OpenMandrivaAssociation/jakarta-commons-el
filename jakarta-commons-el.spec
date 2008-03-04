@@ -39,7 +39,7 @@
 
 Name:           jakarta-commons-el
 Version:        1.0
-Release:        %mkrel 8.1.3
+Release:        %mkrel 8.1.4
 Epoch:          0
 Summary:        The Jakarta Commons Extension Language
 License:        Apache License

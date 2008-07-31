@@ -28,9 +28,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-%define _gcj_support 1
-
-%define gcj_support %{?_with_gcj_support:1}%{!?_with_gcj_support:%{?_without_gcj_support:0}%{!?_without_gcj_support:%{?_gcj_support:%{_gcj_support}}%{!?_gcj_support:0}}}
+%define gcj_support 0
 
 %define base_name       el
 %define short_name      commons-el
@@ -39,7 +37,7 @@
 
 Name:           jakarta-commons-el
 Version:        1.0
-Release:        %mkrel 8.1.4
+Release:        %mkrel 9.4.1
 Epoch:          0
 Summary:        The Jakarta Commons Extension Language
 License:        Apache License
@@ -124,9 +122,7 @@ cp -pr dist/docs/api/* $RPM_BUILD_ROOT%{_javadocdir}/%{name}-%{version}
 ln -s %{name}-%{version} $RPM_BUILD_ROOT%{_javadocdir}/%{name}
 
 
-%if %{gcj_support}
-%{_bindir}/aot-compile-rpm
-%endif
+%{gcj_compile}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -146,11 +142,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0644,root,root,0755)
 %doc LICENSE.txt STATUS.html
 %{_javadir}/*
-
-%if %{gcj_support}
-%dir %attr(-,root,root) %{_libdir}/gcj/%{name}
-%attr(-,root,root) %{_libdir}/gcj/%{name}/jakarta-commons-el-1.0.jar.*
-%endif
+%{gcj_files}
 
 %files javadoc
 %defattr(0644,root,root,0755)

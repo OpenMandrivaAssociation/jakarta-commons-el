@@ -29,7 +29,6 @@
 #
 
 %define gcj_support 0
-
 %define base_name       el
 %define short_name      commons-el
 
@@ -53,8 +52,9 @@ BuildArch:      noarch
 %endif
 BuildRequires:  java-rpmbuild >= 0:1.6
 BuildRequires:  ant
-BuildRequires:  jsp
-BuildRequires:  servletapi5
+#BuildRequires:	jsp
+BuildRequires:	tomcat6-jsp-2.1-api
+BuildRequires:  servlet6
 BuildRequires:  junit
 
 %if %{gcj_support}
@@ -94,8 +94,8 @@ find . -type f -name "*.jar" -exec rm -f {} \;
 cat > build.properties <<EOBP
 build.compiler=modern
 junit.jar=$(build-classpath junit)
-servlet-api.jar=$(build-classpath servletapi5)
-jsp-api.jar=$(build-classpath jspapi)
+servlet-api.jar=$(build-classpath tomcat6-servlet-2.5-api)
+jsp-api.jar=$(build-classpath tomcat6-jsp-2.1-api)
 servletapi.build.notrequired=true
 jspapi.build.notrequired=true
 EOBP

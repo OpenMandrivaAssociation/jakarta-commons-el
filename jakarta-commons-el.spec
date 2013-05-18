@@ -34,54 +34,45 @@
 
 %define section         free
 
-Name:           jakarta-commons-el
-Version:        1.0
-Release:        %mkrel 9.4.3
-Epoch:          0
-Summary:        The Jakarta Commons Extension Language
-License:        Apache License
-Group:          Development/Java
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
-URL:            http://jakarta.apache.org/commons/el/
-Source0:        http://archive.apache.org/dist/jakarta/commons/el/source/commons-el-%{version}-src.tar.gz
-Patch0:         %{short_name}-%{version}-license.patch
-Patch1:         %{short_name}-eclipse-manifest.patch
-Patch2:         jakarta-commons-el-enum.patch
+Summary:	The Jakarta Commons Extension Language
+Name:		jakarta-commons-el
+Version:	1.0
+Release:	9.4.3
+License:	Apache License
+Group:		Development/Java
+Url:		http://jakarta.apache.org/commons/el/
+Source0:	http://archive.apache.org/dist/jakarta/commons/el/source/commons-el-%{version}-src.tar.gz
+Patch0:		%{short_name}-%{version}-license.patch
+Patch1:		%{short_name}-eclipse-manifest.patch
+Patch2:		jakarta-commons-el-enum.patch
 %if ! %{gcj_support}
-BuildArch:      noarch
+BuildArch:	noarch
+%else
+BuildRequires:	java-gcj-compat-devel
 %endif
-BuildRequires:  java-rpmbuild >= 0:1.6
-BuildRequires:  ant
+BuildRequires:	java-rpmbuild >= 0:1.6
+BuildRequires:	ant
 #BuildRequires:	jsp
+BuildRequires:	junit
+BuildRequires:	servlet6
 BuildRequires:	tomcat6-jsp-2.1-api
-BuildRequires:  servlet6
-BuildRequires:  junit
-
-%if %{gcj_support}
-BuildRequires:          java-gcj-compat-devel
-%endif
 
 %description
 An implementation of standard interfaces and abstract classes for
 javax.servlet.jsp.el which is part of the JSP 2.0 specification.
 
-
 %package        javadoc
-Summary:        Javadoc for %{name}
-Group:          Development/Java
-BuildRequires:  java-javadoc
-Requires(post): /bin/rm /bin/ln
-Requires(postun): /bin/rm
-%if %{gcj_support}
-BuildRequires:          java-gcj-compat-devel
-%endif
+Summary:	Javadoc for %{name}
+Group:		Development/Java
+BuildRequires:	java-javadoc
+Requires(post):	/bin/rm /bin/ln
+Requires(postun):	/bin/rm
 
 %description    javadoc
 Javadoc for %{name}.
 
-
 %prep
-%setup -q -n %{short_name}-%{version}-src
+%setup -qn %{short_name}-%{version}-src
 %patch0 -p1 -b .license
 pushd src/conf
 %patch1 -p1
@@ -101,32 +92,25 @@ jspapi.build.notrequired=true
 EOBP
 
 %build
-%{ant} \
-  -Dfinal.name=%{short_name} \
-  -Dj2se.javadoc=%{_javadocdir}/java \
-  jar javadoc
+%ant \
+	-Dfinal.name=%{short_name} \
+	-Dj2se.javadoc=%{_javadocdir}/java \
+	jar javadoc
 
 
 %install
-rm -rf $RPM_BUILD_ROOT
-
 # jars
-mkdir -p $RPM_BUILD_ROOT%{_javadir}
-cp -p dist/%{short_name}.jar $RPM_BUILD_ROOT%{_javadir}/%{name}-%{version}.jar
-(cd $RPM_BUILD_ROOT%{_javadir} && for jar in *-%{version}*; do ln -sf ${jar} `echo $jar| sed "s|jakarta-||g"`; done)
-(cd $RPM_BUILD_ROOT%{_javadir} && for jar in *-%{version}*; do ln -sf ${jar} `echo $jar| sed "s|-%{version}||g"`; done)
+mkdir -p %{buildroot}%{_javadir}
+cp -p dist/%{short_name}.jar %{buildroot}%{_javadir}/%{name}-%{version}.jar
+(cd %{buildroot}%{_javadir} && for jar in *-%{version}*; do ln -sf ${jar} `echo $jar| sed "s|jakarta-||g"`; done)
+(cd %{buildroot}%{_javadir} && for jar in *-%{version}*; do ln -sf ${jar} `echo $jar| sed "s|-%{version}||g"`; done)
 
 # javadoc
-mkdir -p $RPM_BUILD_ROOT%{_javadocdir}/%{name}-%{version}
-cp -pr dist/docs/api/* $RPM_BUILD_ROOT%{_javadocdir}/%{name}-%{version}
-ln -s %{name}-%{version} $RPM_BUILD_ROOT%{_javadocdir}/%{name}
+mkdir -p %{buildroot}%{_javadocdir}/%{name}-%{version}
+cp -pr dist/docs/api/* %{buildroot}%{_javadocdir}/%{name}-%{version}
+ln -s %{name}-%{version} %{buildroot}%{_javadocdir}/%{name}
 
-
-%{gcj_compile}
-
-%clean
-rm -rf $RPM_BUILD_ROOT
-
+%gcj_compile
 
 %if %{gcj_support}
 %post
@@ -139,12 +123,11 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %files
-%defattr(0644,root,root,0755)
 %doc LICENSE.txt STATUS.html
 %{_javadir}/*
 %{gcj_files}
 
 %files javadoc
-%defattr(0644,root,root,0755)
 %doc %{_javadocdir}/%{name}-%{version}
 %doc %{_javadocdir}/%{name}
+

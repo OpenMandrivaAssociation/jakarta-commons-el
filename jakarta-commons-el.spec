@@ -40,7 +40,7 @@ Version:	1.0
 Release:	9.4.3
 License:	Apache License
 Group:		Development/Java
-Url:		http://jakarta.apache.org/commons/el/
+Url:		https://jakarta.apache.org/commons/el/
 Source0:	http://archive.apache.org/dist/jakarta/commons/el/source/commons-el-%{version}-src.tar.gz
 Patch0:		%{short_name}-%{version}-license.patch
 Patch1:		%{short_name}-eclipse-manifest.patch
